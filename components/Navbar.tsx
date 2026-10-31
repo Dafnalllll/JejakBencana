@@ -1,213 +1,111 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import MobileNav from "@/components/MobileNav";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+const caseHref =
+  "/kasus/penanganan-darurat-banjir-bandang-tanah-longsor-wilayah-barat";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
-  const navLinks = [
-    { name: "Beranda", href: "/" },
-    { name: "Alokasi Dana", href: "/allocation" },
-    { name: "Donasi Publik", href: "/donations" },
-    { name: "Laporan & Audit", href: "/reports" },
-    { name: "Tentang", href: "/about" },
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
+  const links = [
+    { label: "Beranda", href: "/" },
+    { label: "Detail Kasus", href: caseHref },
+    { label: "Glosarium", href: "/glosarium" },
   ];
 
-  const isActive = (path: string) => pathname === path;
-
   return (
-    <header className="sticky top-0 z-50 w-full flex flex-col">
-      {/* 2. Floating Glassmorphic Capsule Navbar (Option 1) */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 mt-3">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 transition-all">
-          <div className="flex items-center justify-between px-5 h-16">
-            {/* Logo & Brand */}
-            <div className="flex items-center gap-3">
-              <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 dark:bg-zinc-800 text-white shadow-md overflow-hidden border border-zinc-200 dark:border-zinc-700 group-hover:scale-105 transition-transform">
-                  <Image
-                    src="/favicon.ico"
-                    alt="Jejak Bencana Logo"
-                    width={24}
-                    height={24}
-                    className="object-contain"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-bold text-base tracking-tight text-zinc-900 dark:text-white flex items-center gap-1.5">
-                    Jejak
-                    <span className="text-emerald-600 dark:text-emerald-400">
-                      Dana
-                    </span>
-                  </span>
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium -mt-1">
-                    Transparansi Dana Bencana
-                  </span>
-                </div>
-              </Link>
-            </div>
+    <header className="site-header">
+      <div className="site-header__inner">
+        <Link className="brand" href="/" onClick={() => setIsOpen(false)}>
+          <span className="brand__mark" aria-hidden="true">JB</span>
+          <span>
+            <span className="brand__name">Jejak Bencana</span>
+            <span className="brand__caption">Informasi Dana Siap Pakai</span>
+          </span>
+        </Link>
 
-            {/* Desktop Navigation Links & Mega Menu */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                    isActive(link.href)
-                      ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-white font-semibold"
-                      : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+        <nav className="site-nav" aria-label="Navigasi utama">
+          {links.map((link) => (
+            <Link key={link.href} href={link.href}>
+              {link.label}
+            </Link>
+          ))}
+          <span className="site-nav__external" aria-label="SISTALA-DSP BNPB">
+            SISTALA-DSP BNPB
+          </span>
+        </nav>
 
-              {/* Mega Menu Toggle */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowMegaMenu(!showMegaMenu)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-all"
-                >
-                  <span>Kategori</span>
-                  <svg
-                    className={`h-3.5 w-3.5 transition-transform ${showMegaMenu ? "rotate-180" : ""}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {showMegaMenu && (
-                  <div className="absolute right-0 mt-3 w-80 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2.5">
-                      Pusat Alokasi Dana
-                    </div>
-                    <div className="grid grid-cols-1 gap-2">
-                      <Link
-                        href="/allocation/logistik"
-                        onClick={() => setShowMegaMenu(false)}
-                        className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors group"
-                      >
-                        <div className="font-semibold text-xs text-zinc-900 dark:text-white group-hover:text-emerald-600">
-                          Logistik & Pangan Darurat
-                        </div>
-                        <div className="text-[10px] text-zinc-500">
-                          Distribusi beras, air bersih, tenda
-                        </div>
-                      </Link>
-                      <Link
-                        href="/allocation/medis"
-                        onClick={() => setShowMegaMenu(false)}
-                        className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors group"
-                      >
-                        <div className="font-semibold text-xs text-zinc-900 dark:text-white group-hover:text-emerald-600">
-                          Fasilitas Medis & Obat
-                        </div>
-                        <div className="text-[10px] text-zinc-500">
-                          Rumah sakit lapangan & obat-obatan
-                        </div>
-                      </Link>
-                      <Link
-                        href="/reports/audit"
-                        onClick={() => setShowMegaMenu(false)}
-                        className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors group"
-                      >
-                        <div className="font-semibold text-xs text-zinc-900 dark:text-white group-hover:text-emerald-600">
-                          Laporan Audit PDF Resmi
-                        </div>
-                        <div className="text-[10px] text-zinc-500">
-                          Dokumen transparansi publik
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </nav>
-
-            {/* Right Action Button */}
-            <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="/donations/new"
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition-all hover:shadow-lg hover:shadow-emerald-600/30 active:scale-95"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Salur Donasi
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="flex md:hidden items-center gap-2">
-              <Link
-                href="/donations/new"
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-semibold shadow-sm"
-              >
-                Donasi
-              </Link>
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 focus:outline-none"
-                aria-label="Toggle Menu"
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {isOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-              </button>
-            </div>
-          </div>
-
+        <div className="site-header__actions">
+          <Link className="portal-admin-link" href="/admin">
+            Portal Admin
+          </Link>
+          <motion.button
+            aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-site-nav"
+            className="mobile-menu-button"
+            onClick={() => setIsOpen((open) => !open)}
+            type="button"
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 400, damping: 24 }}
+          >
+            {isOpen ? (
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            )}
+          </motion.button>
         </div>
       </div>
-      <MobileNav
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        navLinks={navLinks}
-      />
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.nav
+            id="mobile-site-nav"
+            className="mobile-site-nav"
+            aria-label="Navigasi mobile"
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -8 }}
+            transition={{
+              duration: shouldReduceMotion ? 0 : 0.18,
+              ease: "easeOut",
+            }}
+          >
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <span>SISTALA-DSP BNPB</span>
+            <Link
+              className="portal-admin-link"
+              href="/admin"
+              onClick={() => setIsOpen(false)}
+            >
+              Portal Admin
+            </Link>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
