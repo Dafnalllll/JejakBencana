@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import PageTransition from "@/components/PageTransition";
+import GlobalNavigationLoading from "@/components/GlobalNavigationLoading";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +25,8 @@ export default function RootLayout({
     <html lang="id" className={inter.variable}>
       <body>
         <Navbar />
-        {children}
+        <GlobalNavigationLoading />
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );

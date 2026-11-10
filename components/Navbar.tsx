@@ -5,29 +5,40 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-const caseHref =
-  "/kasus/penanganan-darurat-banjir-bandang-tanah-longsor-wilayah-barat";
-
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  if (pathname.startsWith("/admin")) {
+  const isPublicRoute =
+    pathname === "/" ||
+    pathname === "/kasus" ||
+    pathname === "/glosarium" ||
+    pathname === "/metodologi" ||
+    /^\/kasus\/[^/]+\/?$/.test(pathname);
+
+  if (!isPublicRoute) {
     return null;
   }
 
   const links = [
     { label: "Beranda", href: "/" },
-    { label: "Detail Kasus", href: caseHref },
+    { label: "Kasus", href: "/kasus" },
     { label: "Glosarium", href: "/glosarium" },
   ];
 
   return (
-    <header className="site-header">
+    <header
+      className={`site-header${pathname === "/" ? " site-header--home" : ""}${pathname.startsWith("/kasus") ? " site-header--cases" : ""}${pathname === "/glosarium" ? " site-header--glossary" : ""}`}
+    >
       <div className="site-header__inner">
         <Link className="brand" href="/" onClick={() => setIsOpen(false)}>
-          <span className="brand__mark" aria-hidden="true">JB</span>
+          <span className="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 3.5 19 6v5.5c0 4.3-2.9 7.3-7 9-4.1-1.7-7-4.7-7-9V6l7-2.5Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+              <path d="m9.2 11.8 1.8 1.8 3.8-4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
           <span>
             <span className="brand__name">Jejak Bencana</span>
             <span className="brand__caption">Informasi Dana Siap Pakai</span>
@@ -36,7 +47,16 @@ export default function Navbar() {
 
         <nav className="site-nav" aria-label="Navigasi utama">
           {links.map((link) => (
-            <Link key={link.href} href={link.href}>
+            <Link
+              aria-current={
+                pathname === link.href ||
+                (link.href === "/kasus" && pathname.startsWith("/kasus/"))
+                  ? "page"
+                  : undefined
+              }
+              key={link.href}
+              href={link.href}
+            >
               {link.label}
             </Link>
           ))}

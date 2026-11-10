@@ -1,4 +1,4 @@
-import type { DisasterCase } from "@/types";
+import type { DisasterCase, FundCategory } from "@/types";
 
 export const INITIAL_MOCK_CASES: DisasterCase[] = [
   {
@@ -175,12 +175,108 @@ export async function getAllCases(): Promise<DisasterCase[]> {
   return getStoredCases();
 }
 
+interface ApiCaseListItem {
+  slug: string;
+  title: string;
+  summary: string;
+  region?: string;
+  updatedAt: string;
+}
+
+interface ApiSourceDto {
+  id: string;
+  title: string;
+  url: string;
+  publisher: string;
+  publishedAt?: string;
+  checkedAt?: string;
+  note?: string;
+  supportingNote?: string;
+}
+
+interface ApiFundingRecordDto {
+  id: string;
+  informationType: FundCategory;
+  amount: number;
+  currency: "IDR";
+  purpose?: string;
+  periodLabel?: string;
+  contextNote?: string;
+  sources?: ApiSourceDto[];
+}
+
+interface ApiCaseDetailDto {
+  slug: string;
+  title: string;
+  summary: string;
+  region?: string;
+  updatedAt: string;
+  fundingRecords?: ApiFundingRecordDto[];
+}
+
 export async function getPublishedCases(): Promise<DisasterCase[]> {
+  try {
+    const res = await fetch("/api/cases", { cache: "no-store" });
+    if (res.ok) {
+      const data = (await res.json()) as ApiCaseListItem[];
+      return data.map((item) => ({
+        id: item.slug,
+        title: item.title,
+        slug: item.slug,
+        affectedArea: item.region || "-",
+        summary: item.summary,
+        status: "PUBLISHED" as const,
+        updatedAt: item.updatedAt,
+        fundRecords: [],
+        sourceDocuments: []
+      }));
+    }
+  } catch {
+    // Fallback to local mock
+  }
   const cases = await getAllCases();
   return cases.filter((c) => c.status === "PUBLISHED");
 }
 
 export async function getCaseBySlug(slug: string): Promise<DisasterCase | null> {
+  try {
+    const res = await fetch(`/api/cases/${slug}`, { cache: "no-store" });
+    if (res.ok) {
+      const entity = (await res.json()) as ApiCaseDetailDto;
+      return {
+        id: entity.slug,
+        title: entity.title,
+        slug: entity.slug,
+        affectedArea: entity.region || "-",
+        summary: entity.summary,
+        status: "PUBLISHED",
+        updatedAt: entity.updatedAt,
+        publishedAt: entity.updatedAt,
+        fundRecords: (entity.fundingRecords || []).map((r) => ({
+          id: r.id,
+          caseId: entity.slug,
+          category: r.informationType,
+          amount: r.amount,
+          currency: r.currency || "IDR",
+          purpose: r.purpose,
+          periodLabel: r.periodLabel,
+          notes: r.contextNote,
+          sources: (r.sources || []).map((s) => ({
+            id: s.id,
+            title: s.title,
+            url: s.url,
+            publisher: s.publisher,
+            publicationDate: s.publishedAt,
+            lastCheckedAt: s.checkedAt,
+            verificationNote: s.note || s.supportingNote
+          }))
+        })),
+        sourceDocuments: []
+      };
+    }
+  } catch {
+    // Fallback to local mock
+  }
   const cases = await getAllCases();
   return cases.find((c) => c.slug === slug) || null;
 }
@@ -251,4 +347,96 @@ export function formatRupiah(amount: number): string {
     currency: "IDR",
     maximumFractionDigits: 0
   }).format(amount);
+}
+
+export interface SourceItem {
+  id: string;
+  title: string;
+  url: string;
+  publisher: string;
+  publishedAt?: string;
+  checkedAt?: string;
+  note?: string;
+}
+
+export interface GlossaryItem {
+  id: string;
+  term: string;
+  definition: string;
+  sourceId?: string;
+}
+
+const SOURCES_STORAGE_KEY = "jejak_bencana_sources_v1";
+const GLOSSARY_STORAGE_KEY = "jejak_bencana_glossary_v1";
+
+const INITIAL_SOURCES: SourceItem[] = [
+  {
+    id: "src-1",
+    title: "SK Penetapan Status Tanggap Darurat Kepala BNPB",
+    url: "https://bnpb.go.id",
+    publisher: "BNPB",
+    publishedAt: "2026-10-16",
+    checkedAt: "2026-10-28",
+    note: "SK resmi alokasi Dana Siap Pakai."
+  },
+  {
+    id: "src-2",
+    title: "Laporan Pertanggungjawaban DSP BNPB Tanggap Darurat Pesisir Barat",
+    url: "https://bnpb.go.id",
+    publisher: "BNPB",
+    publishedAt: "2026-10-20",
+    checkedAt: "2026-10-28",
+    note: "Diperiksa secara manual dari dokumen PDF publik BNPB."
+  }
+];
+
+const INITIAL_GLOSSARY: GlossaryItem[] = [
+  {
+    id: "gls-1",
+    term: "Dana Siap Pakai (DSP)",
+    definition: "Dana yang dicadangkan dan dapat digunakan segera untuk penanganan darurat pada saat terjadi bencana."
+  },
+  {
+    id: "gls-2",
+    term: "Alokasi / Penetapan",
+    definition: "Jumlah anggaran atau dana yang secara resmi ditetapkan melalui Surat Keputusan (SK) atau dokumen otoritas."
+  }
+];
+
+export function getStoredSources(): SourceItem[] {
+  if (typeof window === "undefined") return INITIAL_SOURCES;
+  try {
+    const raw = localStorage.getItem(SOURCES_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(SOURCES_STORAGE_KEY, JSON.stringify(INITIAL_SOURCES));
+      return INITIAL_SOURCES;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return INITIAL_SOURCES;
+  }
+}
+
+export function saveStoredSources(sources: SourceItem[]): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(SOURCES_STORAGE_KEY, JSON.stringify(sources));
+}
+
+export function getStoredGlossary(): GlossaryItem[] {
+  if (typeof window === "undefined") return INITIAL_GLOSSARY;
+  try {
+    const raw = localStorage.getItem(GLOSSARY_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(GLOSSARY_STORAGE_KEY, JSON.stringify(INITIAL_GLOSSARY));
+      return INITIAL_GLOSSARY;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return INITIAL_GLOSSARY;
+  }
+}
+
+export function saveStoredGlossary(glossary: GlossaryItem[]): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(GLOSSARY_STORAGE_KEY, JSON.stringify(glossary));
 }

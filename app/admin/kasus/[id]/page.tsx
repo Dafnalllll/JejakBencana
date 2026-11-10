@@ -6,6 +6,7 @@ import { DisasterCase, FundRecord, FundCategory } from "@/types";
 import { getCaseById, upsertCase, formatRupiah } from "@/lib/mockService";
 import DemoDataBanner from "@/components/DemoDataBanner";
 import FundCategoryBadge from "@/components/FundCategoryBadge";
+import LoadingState from "@/components/LoadingState";
 
 export const dynamic = "force-dynamic";
 
@@ -92,9 +93,8 @@ function AdminEditCaseContent({ id }: { id: string }) {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto w-full px-4 py-20 animate-pulse space-y-6 flex-1">
-        <div className="h-10 bg-zinc-200 dark:bg-zinc-800 rounded w-1/3" />
-        <div className="h-96 bg-zinc-200 dark:bg-zinc-800 rounded-2xl" />
+      <div className="max-w-4xl mx-auto w-full px-4 py-20 flex-1">
+        <LoadingState label="Memuat formulir kasus..." variant="form" />
       </div>
     );
   }
