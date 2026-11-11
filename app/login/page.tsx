@@ -79,10 +79,10 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FAF8FF] text-[#172235]">
-      <main className="mx-auto grid w-[calc(100%-2rem)] max-w-[1280px] flex-1 content-center gap-7 py-8 sm:w-[calc(100%-3rem)] max-sm:gap-5 max-sm:py-5">
+      <main className="mx-auto grid w-[calc(100%-2rem)] max-w-7xl flex-1 content-center gap-7 py-8 sm:w-[calc(100%-3rem)] max-sm:gap-5 max-sm:py-5">
         <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(380px,0.98fr)] max-lg:gap-5">
           <section
-            className="flex min-h-[520px] flex-col rounded-2xl bg-gradient-to-br from-[#00695F] via-[#005B53] to-[#00685E] p-8 text-white shadow-xl shadow-[#005B53]/10 sm:p-9 max-md:min-h-0 max-md:p-6"
+            className="flex min-h-130 flex-col rounded-2xl bg-linear-to-br from-[#00695F] via-[#005B53] to-[#00685E] p-8 text-white shadow-xl shadow-[#005B53]/10 sm:p-9 max-md:min-h-0 max-md:p-6"
             aria-labelledby="admin-login-feature-title"
           >
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-[#E8FFFA]">
@@ -109,18 +109,18 @@ export default function AdminLoginPage() {
               Portal Pengawasan &amp; Verifikasi Dokumen
             </span>
             <h1
-              className="mt-6 max-w-[640px] text-[clamp(30px,3.2vw,42px)] font-bold leading-[1.15] tracking-[-0.035em] text-white"
+              className="mt-6 max-w-160 text-[clamp(30px,3.2vw,42px)] font-bold leading-[1.15] tracking-[-0.035em] text-white"
               id="admin-login-feature-title"
             >
               Sistem Pemantauan &amp; Verifikasi Dokumen Dana Siap Pakai (DSP)
             </h1>
-            <p className="mt-4 max-w-[640px] text-base leading-7 text-[#A8DCD4] max-sm:text-sm max-sm:leading-6">
+            <p className="mt-4 max-w-160 text-base leading-7 text-[#A8DCD4] max-sm:text-sm max-sm:leading-6">
               Portal pengelolaan data demo kasus, catatan DSP, dan dokumen
               rujukan untuk mendukung verifikasi informasi kebencanaan.
             </p>
 
             <div className="mt-7 grid gap-3">
-              <article className="flex min-h-[68px] items-center gap-4 rounded-xl border border-white/15 bg-white/[0.09] px-4 py-3">
+              <article className="flex min-h-17 items-center gap-4 rounded-xl border border-white/15 bg-white/9 px-4 py-3">
                 <span
                   className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/10 text-[#B5E5DC]"
                   aria-hidden="true"
@@ -145,7 +145,7 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
               </article>
-              <article className="flex min-h-[68px] items-center gap-4 rounded-xl border border-white/15 bg-white/[0.09] px-4 py-3">
+              <article className="flex min-h-17 items-center gap-4 rounded-xl border border-white/15 bg-white/9 px-4 py-3">
                 <span
                   className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/10 text-[#B5E5DC]"
                   aria-hidden="true"
@@ -175,7 +175,7 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
               </article>
-              <article className="flex min-h-[68px] items-center gap-4 rounded-xl border border-white/15 bg-white/[0.09] px-4 py-3">
+              <article className="flex min-h-17 items-center gap-4 rounded-xl border border-white/15 bg-white/9 px-4 py-3">
                 <span
                   className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/10 text-[#B5E5DC]"
                   aria-hidden="true"
@@ -241,7 +241,7 @@ export default function AdminLoginPage() {
           </section>
 
           <section
-            className="flex min-h-[520px] flex-col rounded-2xl border border-[#C9D3D4] bg-white p-8 shadow-xl shadow-[#172235]/5 sm:p-9 max-lg:min-h-0 max-md:p-6"
+            className="flex min-h-130 flex-col rounded-2xl border border-[#C9D3D4] bg-white p-8 shadow-xl shadow-[#172235]/5 sm:p-9 max-lg:min-h-0 max-md:p-6"
             aria-labelledby="admin-login-title"
           >
             <div className="flex items-center justify-between gap-4 border-b border-[#DDE4E4] pb-5 max-md:flex-col max-md:items-start">
@@ -317,7 +317,7 @@ export default function AdminLoginPage() {
             <form onSubmit={handleLogin} className="mt-6 grid gap-5">
               <label className="grid gap-2 text-sm font-bold text-[#34413F]">
                 <span>Email / username</span>
-                <span className="flex min-h-12 items-center gap-3 rounded-lg border border-[#CDD8D7] px-3 text-[#697875] focus-within:border-[#087C67] focus-within:outline focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
+                <span className="flex min-h-12 items-center gap-3 rounded-lg border border-[#CDD8D7] px-3 text-[#697875] focus-within:border-[#087C67]  focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
                   <svg
                     className="size-5 shrink-0"
                     viewBox="0 0 24 24"
@@ -355,7 +355,7 @@ export default function AdminLoginPage() {
 
               <label className="grid gap-2 text-sm font-bold text-[#34413F]">
                 <span>Kata sandi</span>
-                <span className="flex min-h-12 items-center gap-3 rounded-lg border border-[#CDD8D7] px-3 text-[#697875] focus-within:border-[#087C67] focus-within:outline focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
+                <span className="flex min-h-12 items-center gap-3 rounded-lg border border-[#CDD8D7] px-3 text-[#697875] focus-within:border-[#087C67]  focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
                   <svg
                     className="size-5 shrink-0"
                     viewBox="0 0 24 24"
@@ -392,7 +392,7 @@ export default function AdminLoginPage() {
                         ? "Sembunyikan kata sandi"
                         : "Tampilkan kata sandi"
                     }
-                    className="grid size-10 shrink-0 place-items-center rounded-lg bg-transparent text-[#697875] hover:bg-[#F1F5F4] hover:text-[#006C62] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#087C67]"
+                    className="grid size-10 shrink-0 place-items-center rounded-lg bg-transparent text-[#697875] hover:bg-[#F1F5F4] hover:text-[#006C62]  focus-visible:outline-2 focus-visible:outline-[#087C67]"
                     onClick={() => setShowPassword((visible) => !visible)}
                     type="button"
                   >

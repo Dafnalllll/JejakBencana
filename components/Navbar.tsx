@@ -31,7 +31,7 @@ export default function Navbar() {
 
   return (
     <header className="relative z-30 border-b border-[#DCE7E5] bg-white/95 shadow-sm backdrop-blur-xl">
-      <div className="mx-auto flex min-h-[64px] w-[calc(100%-32px)] max-w-[1240px] items-center justify-between gap-3 sm:min-h-[72px] sm:w-[calc(100%-48px)] lg:gap-6">
+      <div className="mx-auto flex min-h-16 w-[calc(100%-32px)] max-w-310 items-center justify-between gap-3 sm:min-h-18 sm:w-[calc(100%-48px)] lg:gap-6">
         <Link
           className="inline-flex min-w-0 shrink-0 items-center gap-2.5 text-[#172238] no-underline transition-opacity hover:opacity-85 sm:gap-3"
           href="/"
@@ -50,7 +50,7 @@ export default function Navbar() {
             />
           </span>
           <span className="min-w-0">
-            <span className="block truncate text-[13px] leading-[18px] font-bold tracking-[-0.025em] sm:text-base sm:leading-6">
+            <span className="block truncate text-[13px] leading-4.5 font-bold tracking-tight sm:text-base sm:leading-6">
               Jejak Bencana
             </span>
             <span className="mt-0.5 block truncate text-[9px] leading-3 text-[#64716F] sm:text-[11px] sm:leading-4">
