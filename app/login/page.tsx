@@ -79,15 +79,15 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FAF8FF] text-[#172235]">
-      <main className="mx-auto grid w-[calc(100%-2rem)] max-w-[1180px] flex-1 content-center gap-5 py-6 sm:w-[calc(100%-3rem)]">
-        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(330px,0.98fr)]">
+      <main className="mx-auto grid w-[calc(100%-2rem)] max-w-[1280px] flex-1 content-center gap-7 py-8 sm:w-[calc(100%-3rem)] max-sm:gap-5 max-sm:py-5">
+        <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(380px,0.98fr)] max-lg:gap-5">
           <section
-            className="flex min-h-[430px] flex-col rounded-[9px] bg-gradient-to-br from-[#00695F] via-[#005B53] to-[#00685E] p-5 text-white sm:p-6"
+            className="flex min-h-[520px] flex-col rounded-2xl bg-gradient-to-br from-[#00695F] via-[#005B53] to-[#00685E] p-8 text-white shadow-xl shadow-[#005B53]/10 sm:p-9 max-md:min-h-0 max-md:p-6"
             aria-labelledby="admin-login-feature-title"
           >
-            <span className="inline-flex w-fit items-center gap-1.5 rounded-md border border-white/20 bg-white/10 px-2 py-1 text-[8px] font-semibold text-[#E8FFFA]">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-[#E8FFFA]">
               <svg
-                className="size-[13px]"
+                className="size-4"
                 viewBox="0 0 24 24"
                 fill="none"
                 aria-hidden="true"
@@ -109,23 +109,23 @@ export default function AdminLoginPage() {
               Portal Pengawasan &amp; Verifikasi Dokumen
             </span>
             <h1
-              className="mt-[18px] max-w-[560px] text-[clamp(22px,2.5vw,29px)] font-bold leading-[1.2] tracking-[-0.035em] text-white"
+              className="mt-6 max-w-[640px] text-[clamp(30px,3.2vw,42px)] font-bold leading-[1.15] tracking-[-0.035em] text-white"
               id="admin-login-feature-title"
             >
               Sistem Pemantauan &amp; Verifikasi Dokumen Dana Siap Pakai (DSP)
             </h1>
-            <p className="mt-2.5 max-w-[560px] text-[11px] leading-[18px] text-[#A8DCD4]">
+            <p className="mt-4 max-w-[640px] text-base leading-7 text-[#A8DCD4] max-sm:text-sm max-sm:leading-6">
               Portal pengelolaan data demo kasus, catatan DSP, dan dokumen
               rujukan untuk mendukung verifikasi informasi kebencanaan.
             </p>
 
-            <div className="mt-[21px] grid gap-[9px]">
-              <article className="flex min-h-[50px] items-center gap-2.5 rounded-[7px] border border-white/10 bg-white/[0.09] px-2.5 py-2">
+            <div className="mt-7 grid gap-3">
+              <article className="flex min-h-[68px] items-center gap-4 rounded-xl border border-white/15 bg-white/[0.09] px-4 py-3">
                 <span
-                  className="grid size-[26px] shrink-0 place-items-center rounded-[5px] bg-white/10 text-[#B5E5DC]"
+                  className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/10 text-[#B5E5DC]"
                   aria-hidden="true"
                 >
-                  <svg className="size-4" viewBox="0 0 24 24" fill="none">
+                  <svg className="size-5" viewBox="0 0 24 24" fill="none">
                     <path
                       d="M3 9h18M5 6l7-3 7 3M5 21h14M7 9v9m5-9v9m5-9v9"
                       stroke="currentColor"
@@ -136,21 +136,21 @@ export default function AdminLoginPage() {
                   </svg>
                 </span>
                 <div>
-                  <strong className="block text-[9px] font-bold leading-[14px] text-white">
+                  <strong className="block text-sm font-bold leading-5 text-white">
                     Keselarasan SK dan realisasi
                   </strong>
-                  <p className="mt-0.5 text-[9px] leading-[14px] text-[#A8DCD4]">
+                  <p className="mt-1 text-xs leading-5 text-[#A8DCD4]">
                     Data alokasi dan catatan realisasi dapat ditinjau
                     berdampingan.
                   </p>
                 </div>
               </article>
-              <article className="flex min-h-[50px] items-center gap-2.5 rounded-[7px] border border-white/10 bg-white/[0.09] px-2.5 py-2">
+              <article className="flex min-h-[68px] items-center gap-4 rounded-xl border border-white/15 bg-white/[0.09] px-4 py-3">
                 <span
-                  className="grid size-[26px] shrink-0 place-items-center rounded-[5px] bg-white/10 text-[#B5E5DC]"
+                  className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/10 text-[#B5E5DC]"
                   aria-hidden="true"
                 >
-                  <svg className="size-4" viewBox="0 0 24 24" fill="none">
+                  <svg className="size-5" viewBox="0 0 24 24" fill="none">
                     <path
                       d="m12 3 2.2 2 3-.1.8 2.9 2.5 1.7-1 2.8 1 2.8-2.5 1.7-.8 2.9-3-.1-2.2 2-2.2-2-3 .1-.8-2.9-2.5-1.7 1-2.8-1-2.8 2.5-1.7.8-2.9 3 .1L12 3Z"
                       stroke="currentColor"
@@ -167,20 +167,20 @@ export default function AdminLoginPage() {
                   </svg>
                 </span>
                 <div>
-                  <strong className="block text-[9px] font-bold leading-[14px] text-white">
+                  <strong className="block text-sm font-bold leading-5 text-white">
                     Verifikasi dokumen rujukan
                   </strong>
-                  <p className="mt-0.5 text-[9px] leading-[14px] text-[#A8DCD4]">
+                  <p className="mt-1 text-xs leading-5 text-[#A8DCD4]">
                     Kelola sumber, tanggal pemeriksaan, dan catatan verifikasi.
                   </p>
                 </div>
               </article>
-              <article className="flex min-h-[50px] items-center gap-2.5 rounded-[7px] border border-white/10 bg-white/[0.09] px-2.5 py-2">
+              <article className="flex min-h-[68px] items-center gap-4 rounded-xl border border-white/15 bg-white/[0.09] px-4 py-3">
                 <span
-                  className="grid size-[26px] shrink-0 place-items-center rounded-[5px] bg-white/10 text-[#B5E5DC]"
+                  className="grid size-10 shrink-0 place-items-center rounded-lg bg-white/10 text-[#B5E5DC]"
                   aria-hidden="true"
                 >
-                  <svg className="size-4" viewBox="0 0 24 24" fill="none">
+                  <svg className="size-5" viewBox="0 0 24 24" fill="none">
                     <rect
                       x="4"
                       y="10"
@@ -199,10 +199,10 @@ export default function AdminLoginPage() {
                   </svg>
                 </span>
                 <div>
-                  <strong className="block text-[9px] font-bold leading-[14px] text-white">
+                  <strong className="block text-sm font-bold leading-5 text-white">
                     Jejak pengelolaan data
                   </strong>
-                  <p className="mt-0.5 text-[9px] leading-[14px] text-[#A8DCD4]">
+                  <p className="mt-1 text-xs leading-5 text-[#A8DCD4]">
                     Perubahan dicatat pada penyimpanan lokal untuk kebutuhan
                     demo.
                   </p>
@@ -210,10 +210,10 @@ export default function AdminLoginPage() {
               </article>
             </div>
 
-            <div className="mt-auto border-t border-white/20 pt-3.5">
-              <strong className="flex items-center gap-1.5 text-[8px] font-bold tracking-[0.04em] text-[#A8DCD4]">
+            <div className="mt-auto border-t border-white/20 pt-5">
+              <strong className="flex items-center gap-2 text-xs font-bold tracking-[0.04em] text-[#A8DCD4]">
                 <svg
-                  className="size-[13px]"
+                  className="size-4"
                   viewBox="0 0 24 24"
                   fill="none"
                   aria-hidden="true"
@@ -233,7 +233,7 @@ export default function AdminLoginPage() {
                 </svg>
                 CATATAN PENGGUNAAN
               </strong>
-              <p className="mt-1.5 text-[9px] leading-[15px] text-[#C0E4DE]">
+              <p className="mt-2 text-xs leading-5 text-[#C0E4DE]">
                 Gunakan data demo hanya untuk pengujian antarmuka. Verifikasi
                 setiap informasi melalui dokumen resmi sebelum digunakan.
               </p>
@@ -241,27 +241,27 @@ export default function AdminLoginPage() {
           </section>
 
           <section
-            className="flex min-h-[430px] flex-col rounded-[9px] border border-[#C9D3D4] bg-white p-5 shadow-[0_2px_5px_rgb(19_27_46_/_3%)] sm:p-[22px] max-lg:min-h-0"
+            className="flex min-h-[520px] flex-col rounded-2xl border border-[#C9D3D4] bg-white p-8 shadow-xl shadow-[#172235]/5 sm:p-9 max-lg:min-h-0 max-md:p-6"
             aria-labelledby="admin-login-title"
           >
-            <div className="flex items-center justify-between gap-2.5 border-b border-[#DDE4E4] pb-[13px] max-md:flex-col max-md:items-start">
+            <div className="flex items-center justify-between gap-4 border-b border-[#DDE4E4] pb-5 max-md:flex-col max-md:items-start">
               <div>
-                <span className="mb-1 block text-[8px] font-extrabold tracking-[0.09em] text-[#087C67]">
+                <span className="mb-2 block text-[11px] font-extrabold tracking-[0.09em] text-[#087C67]">
                   AKSES INTERNAL
                 </span>
                 <h2
-                  className="max-w-[220px] text-xl font-bold leading-[1.25] tracking-[-0.03em] text-[#182238]"
+                  className="max-w-[320px] text-2xl font-bold leading-[1.2] tracking-[-0.03em] text-[#182238]"
                   id="admin-login-title"
                 >
                   Masuk ke Portal Verifikator
                 </h2>
-                <p className="mt-1 text-[9px] leading-[15px] text-[#66716F]">
+                <p className="mt-2 text-sm leading-6 text-[#66716F]">
                   Gunakan akun yang telah terdaftar untuk melanjutkan.
                 </p>
               </div>
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#BCEBDD] bg-[#F0FCF7] px-[7px] py-1 text-[7px] font-extrabold text-[#087C67]">
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#BCEBDD] bg-[#F0FCF7] px-3 py-2 text-[10px] font-extrabold text-[#087C67]">
                 <svg
-                  className="size-[11px]"
+                  className="size-4"
                   viewBox="0 0 24 24"
                   fill="none"
                   aria-hidden="true"
@@ -287,7 +287,7 @@ export default function AdminLoginPage() {
 
             {error && (
               <div
-                className="mt-3 flex items-start gap-[7px] rounded-md border border-[#F2CACA] bg-[#FFF6F6] p-2 text-[9px] leading-[14px] text-[#A12B23]"
+                className="mt-4 flex items-start gap-2 rounded-lg border border-[#F2CACA] bg-[#FFF6F6] p-3 text-xs leading-5 text-[#A12B23]"
                 role="alert"
               >
                 <svg
@@ -314,12 +314,12 @@ export default function AdminLoginPage() {
               </div>
             )}
 
-            <form onSubmit={handleLogin} className="mt-3.5 grid gap-3">
-              <label className="grid gap-[5px] text-[9px] font-bold text-[#34413F]">
+            <form onSubmit={handleLogin} className="mt-6 grid gap-5">
+              <label className="grid gap-2 text-sm font-bold text-[#34413F]">
                 <span>Email / username</span>
-                <span className="flex min-h-9 items-center gap-2 rounded-md border border-[#CDD8D7] px-[9px] text-[#697875] focus-within:border-[#087C67] focus-within:outline focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
+                <span className="flex min-h-12 items-center gap-3 rounded-lg border border-[#CDD8D7] px-3 text-[#697875] focus-within:border-[#087C67] focus-within:outline focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
                   <svg
-                    className="size-[15px] shrink-0"
+                    className="size-5 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     aria-hidden="true"
@@ -342,7 +342,7 @@ export default function AdminLoginPage() {
                     />
                   </svg>
                   <input
-                    className="h-[34px] w-full min-w-0 border-0 bg-transparent text-[10px] text-[#202D2B] outline-none placeholder:text-[#8A9694]"
+                    className="h-11 w-full min-w-0 border-0 bg-transparent text-base text-[#202D2B] outline-none placeholder:text-sm placeholder:text-[#8A9694]"
                     autoComplete="username"
                     onChange={(event) => setUsername(event.target.value)}
                     placeholder="nama@instansi.go.id"
@@ -353,11 +353,11 @@ export default function AdminLoginPage() {
                 </span>
               </label>
 
-              <label className="grid gap-[5px] text-[9px] font-bold text-[#34413F]">
+              <label className="grid gap-2 text-sm font-bold text-[#34413F]">
                 <span>Kata sandi</span>
-                <span className="flex min-h-9 items-center gap-2 rounded-md border border-[#CDD8D7] px-[9px] text-[#697875] focus-within:border-[#087C67] focus-within:outline focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
+                <span className="flex min-h-12 items-center gap-3 rounded-lg border border-[#CDD8D7] px-3 text-[#697875] focus-within:border-[#087C67] focus-within:outline focus-within:outline-[3px] focus-within:outline-[#087C67]/15">
                   <svg
-                    className="size-[15px] shrink-0"
+                    className="size-5 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     aria-hidden="true"
@@ -378,7 +378,7 @@ export default function AdminLoginPage() {
                     />
                   </svg>
                   <input
-                    className="h-[34px] w-full min-w-0 border-0 bg-transparent text-[10px] text-[#202D2B] outline-none placeholder:text-[#8A9694]"
+                    className="h-11 w-full min-w-0 border-0 bg-transparent text-base text-[#202D2B] outline-none placeholder:text-sm placeholder:text-[#8A9694]"
                     autoComplete="current-password"
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder="Masukkan kata sandi"
@@ -392,13 +392,13 @@ export default function AdminLoginPage() {
                         ? "Sembunyikan kata sandi"
                         : "Tampilkan kata sandi"
                     }
-                    className="grid size-[28px] shrink-0 place-items-center rounded bg-transparent text-[#697875] hover:bg-[#F1F5F4] hover:text-[#006C62] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#087C67]"
+                    className="grid size-10 shrink-0 place-items-center rounded-lg bg-transparent text-[#697875] hover:bg-[#F1F5F4] hover:text-[#006C62] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#087C67]"
                     onClick={() => setShowPassword((visible) => !visible)}
                     type="button"
                   >
                     {showPassword ? (
                       <svg
-                        className="size-4"
+                        className="size-5"
                         viewBox="0 0 24 24"
                         fill="none"
                         aria-hidden="true"
@@ -413,7 +413,7 @@ export default function AdminLoginPage() {
                       </svg>
                     ) : (
                       <svg
-                        className="size-4"
+                        className="size-5"
                         viewBox="0 0 24 24"
                         fill="none"
                         aria-hidden="true"
@@ -440,7 +440,7 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-0.5 flex min-h-[38px] items-center justify-center gap-2 rounded-md border border-[#087C67] bg-[#087C67] px-[13px] text-[10px] font-bold text-white transition hover:-translate-y-px hover:bg-[#006257] disabled:cursor-wait disabled:opacity-65"
+                className="mt-1 flex min-h-12 items-center justify-center gap-3 rounded-lg border border-[#087C67] bg-[#087C67] px-5 text-sm font-bold text-white shadow-md transition hover:-translate-y-px hover:bg-[#006257] hover:shadow-lg disabled:cursor-wait disabled:opacity-65"
               >
                 {loading
                   ? "Memproses autentikasi..."
@@ -453,9 +453,9 @@ export default function AdminLoginPage() {
               </button>
             </form>
 
-            <div className="mt-auto grid gap-1 border-t border-[#E1E7E6] pt-3 text-[8px] leading-[14px] text-[#677572]">
-              <strong className="text-[8px] text-[#40504D]">Akses demo</strong>
-              <span className="flex flex-wrap items-center gap-[5px]">
+            <div className="mt-auto grid gap-2 border-t border-[#E1E7E6] pt-5 text-xs leading-5 text-[#677572]">
+              <strong className="text-sm text-[#40504D]">Akses demo</strong>
+              <span className="flex flex-wrap items-center gap-2">
                 Username{" "}
                 <code className="rounded-sm bg-[#F0F5F3] px-1 py-px font-bold text-[#006C62]">
                   admin
@@ -470,9 +470,9 @@ export default function AdminLoginPage() {
           </section>
         </div>
 
-        <aside className="flex items-start gap-2 rounded-md border border-[#F3D568] bg-[#FFF5C9] px-3 py-[11px] text-[#9B4A0B]">
+        <aside className="flex items-start gap-3 rounded-lg border border-[#F3D568] bg-[#FFF5C9] px-5 py-4 text-[#9B4A0B]">
           <svg
-            className="mt-px size-[15px] shrink-0"
+            className="mt-0.5 size-5 shrink-0"
             viewBox="0 0 24 24"
             fill="none"
             aria-hidden="true"
@@ -492,10 +492,10 @@ export default function AdminLoginPage() {
             />
           </svg>
           <div>
-            <strong className="block text-[9px] font-extrabold leading-[14px]">
+            <strong className="block text-sm font-extrabold leading-5">
               Batasan Informasi &amp; Integritas Data Publik
             </strong>
-            <p className="mt-[3px] text-[9px] leading-[15px]">
+            <p className="mt-1 text-xs leading-5">
               Portal ini menyajikan data contoh pemantauan{" "}
               <b>Dana Siap Pakai (DSP)</b> berdasarkan rujukan dokumen. Portal
               ini <b>bukan platform donasi</b> dan tidak mengelola rekening atau

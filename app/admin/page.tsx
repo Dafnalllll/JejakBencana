@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import AdminCaseBrowser from "@/components/AdminCaseBrowser";
 import AdminCaseEditor from "@/components/AdminCaseEditor";
+import AdminCasesManagement from "@/components/AdminCasesManagement";
+import AdminDashboardOverview from "@/components/AdminDashboardOverview";
+import AdminFundsManagement from "@/components/AdminFundsManagement";
 import AdminPublishDialog from "@/components/AdminPublishDialog";
 import AdminSidebar from "@/components/AdminSidebar";
 import DemoDataBanner from "@/components/DemoDataBanner";
@@ -93,6 +96,7 @@ function isHttpUrl(value: string) {
 
 export default function AdminDashboardPage() {
   const router = useRouter();
+  const [view, setView] = useState<"dashboard" | "cases" | "funds" | "editor">("dashboard");
   const [cases, setCases] = useState<DisasterCase[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [caseForm, setCaseForm] = useState<CaseForm>({ ...emptyCase });
@@ -112,7 +116,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     if (!localStorage.getItem("jejak_bencana_auth")) {
-      router.push("/admin/login");
+      router.push("/login");
       return;
     }
 
@@ -142,6 +146,7 @@ export default function AdminDashboardPage() {
   }, [router]);
 
   const chooseCase = (item: DisasterCase) => {
+    setView("editor");
     setSelectedId(item.id);
     setCaseForm(toCaseForm(item));
     setFundForms(toFundForms(item));
@@ -152,6 +157,7 @@ export default function AdminDashboardPage() {
   };
 
   const startNewCase = () => {
+    setView("editor");
     setSelectedId("");
     setCaseForm({ ...emptyCase });
     setFundForms([]);
@@ -168,7 +174,7 @@ export default function AdminDashboardPage() {
       // The demo session is cleared locally even when the endpoint is unavailable.
     }
     localStorage.removeItem("jejak_bencana_auth");
-    router.push("/admin/login");
+    router.push("/login");
   };
 
   const refreshCases = async () => {
@@ -177,8 +183,18 @@ export default function AdminDashboardPage() {
       const data = await getAllCases();
       setCases(data);
       const current = data.find((item) => item.id === selectedId) ?? data[0];
-      if (current) chooseCase(current);
-      else startNewCase();
+      if (current) {
+        setSelectedId(current.id);
+        setCaseForm(toCaseForm(current));
+        setFundForms(toFundForms(current));
+        setSourceForms(toSourceForms(current));
+        setFormStep(0);
+      } else {
+        setSelectedId("");
+        setCaseForm({ ...emptyCase });
+        setFundForms([]);
+        setSourceForms([]);
+      }
       setFeedback("Data demo berhasil disinkronkan dari penyimpanan lokal.");
     } catch {
       setErrors({ load: "Sinkronisasi data demo gagal. Coba lagi." });
@@ -348,6 +364,43 @@ export default function AdminDashboardPage() {
     setFormStep(1);
   };
 
+  const startNewFundRecord = () => {
+    if (selectedCase) {
+      setSelectedId(selectedCase.id);
+      setCaseForm(toCaseForm(selectedCase));
+      setFundForms([
+        ...toFundForms(selectedCase),
+        {
+          id: `new-fund-${Date.now()}`,
+          category: "ALLOCATION",
+          amount: "",
+          purpose: "",
+          periodLabel: "",
+          documentDate: "",
+          sourceTitle: "",
+        },
+      ]);
+      setSourceForms(toSourceForms(selectedCase));
+      setErrors({});
+      setFeedback("");
+      setFormStep(1);
+      setView("editor");
+      return;
+    }
+
+    startNewCase();
+    setFundForms([{
+      id: `new-fund-${Date.now()}`,
+      category: "ALLOCATION",
+      amount: "",
+      purpose: "",
+      periodLabel: "",
+      documentDate: "",
+      sourceTitle: "",
+    }]);
+    setFormStep(1);
+  };
+
   const addSource = () => {
     setSourceForms((current) => [...current, {
       id: `new-source-${Date.now()}`,
@@ -361,10 +414,102 @@ export default function AdminDashboardPage() {
 
   const goToFormStep = (step: AdminFormStep) => {
     setFormStep(step);
+    setView("editor");
+  };
+
+  const openCases = () => {
+    setView("cases");
+    setErrors({});
+    setFeedback("");
+  };
+
+  const openFunds = () => {
+    setView("funds");
+    setErrors({});
+    setFeedback("");
+  };
+
+  const editFundsForCase = (item: DisasterCase) => {
+    setSelectedId(item.id);
+    setCaseForm(toCaseForm(item));
+    setFundForms(toFundForms(item));
+    setSourceForms(toSourceForms(item));
+    setErrors({});
+    setFeedback("");
+    setFormStep(1);
+    setView("editor");
+  };
+
+  useEffect(() => {
+    if (view !== "editor") return;
     document.getElementById("admin-steps")?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
       block: "start",
     });
+  }, [view, formStep]);
+
+  const exportReport = () => {
+    const quote = (value: string) => `"${value.replaceAll('"', '""')}"`;
+    const rows = [
+      [
+        "Judul kasus",
+        "Status",
+        "Wilayah",
+        "Alokasi",
+        "Penyaluran",
+        "Realisasi",
+        "Dokumen sumber",
+      ],
+      ...cases.map((item) => {
+        const totalFor = (category: "ALLOCATION" | "DISTRIBUTION" | "REALIZATION") =>
+          item.fundRecords
+            .filter((record) => record.category === category)
+            .reduce((total, record) => total + record.amount, 0);
+        return [
+          item.title,
+          item.status === "PUBLISHED" ? "Dipublikasikan" : "Draft",
+          item.affectedArea,
+          String(totalFor("ALLOCATION")),
+          String(totalFor("DISTRIBUTION")),
+          String(totalFor("REALIZATION")),
+          String(item.sourceDocuments.length),
+        ];
+      }),
+    ];
+    const csv = `\uFEFF${rows.map((row) => row.map(quote).join(",")).join("\r\n")}`;
+    const file = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(file);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "laporan-audit-jejak-bencana.csv";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportFundReport = () => {
+    const quote = (value: string) => `"${value.replaceAll('"', '""')}"`;
+    const rows = [
+      ["ID Catatan", "Kasus", "Wilayah", "Kategori", "Pos Penggunaan", "Nominal (IDR)", "Periode", "Tanggal Dokumen", "Dokumen Rujukan"],
+      ...cases.flatMap((item) => item.fundRecords.map((record) => [
+        record.id,
+        item.title,
+        item.affectedArea,
+        record.category,
+        record.purpose ?? "",
+        String(record.amount),
+        record.periodLabel ?? "",
+        record.documentDate ?? "",
+        record.sources.map((source) => source.title).join("; "),
+      ])),
+    ];
+    const csv = `\uFEFF${rows.map((row) => row.map(quote).join(",")).join("\r\n")}`;
+    const file = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(file);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "catatan-alokasi-dsp-jejak-bencana.csv";
+    anchor.click();
+    URL.revokeObjectURL(url);
   };
 
   if (loading) {
@@ -384,50 +529,99 @@ export default function AdminDashboardPage() {
       <div className="admin-layout">
         <AdminSidebar
           currentStep={formStep}
+          isDashboardActive={view === "dashboard"}
+          isCasesActive={view === "cases"}
+          isFundsActive={view === "funds"}
           onCreateCase={startNewCase}
           onLogout={handleLogout}
           onNavigateToStep={goToFormStep}
+          onShowCases={openCases}
+          onShowFunds={openFunds}
+          onShowDashboard={() => setView("dashboard")}
         />
-        <main className="admin-main" id="dashboard">
-          <header className="admin-main__header">
-            <div>
-              <h1>Dashboard Admin - Jejak Bencana</h1>
-              <p>Pengelolaan data demo kasus, catatan DSP, dan dokumen rujukan.</p>
+        {view === "dashboard" ? (
+          <AdminDashboardOverview
+            cases={cases}
+            error={errors.load || errors.save}
+            feedback={feedback}
+            onCreateCase={startNewCase}
+            onEditCase={chooseCase}
+            onEditStep={(step) => step === 0 ? openCases() : step === 1 ? openFunds() : goToFormStep(step)}
+            onExport={exportReport}
+            onRefresh={refreshCases}
+            onViewSources={() => router.push("/admin/sumber")}
+          />
+        ) : view === "cases" ? (
+          <AdminCasesManagement
+            cases={cases}
+            error={errors.load || errors.save}
+            feedback={feedback}
+            onCreateCase={startNewCase}
+            onEditCase={chooseCase}
+            onExport={exportReport}
+            onRefresh={refreshCases}
+          />
+        ) : view === "funds" ? (
+          <AdminFundsManagement
+            cases={cases}
+            onCreateFund={startNewFundRecord}
+            onEditFund={editFundsForCase}
+            onExport={exportFundReport}
+          />
+        ) : (
+          <main className="admin-main min-w-0 flex-1" id="dashboard">
+            <header className="admin-main__header">
+              <div>
+                <p className="mb-1 text-[10px] font-semibold tracking-wide text-[#718096]">
+                  Admin Portal / Pengelolaan Data
+                </p>
+                <h1>Entri Bencana &amp; Kasus</h1>
+                <p>Kelola informasi kasus, catatan DSP, dan dokumen rujukan.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className="button-secondary"
+                  onClick={openCases}
+                  type="button"
+                >
+                  Kembali ke Daftar Kasus
+                </button>
+                <Link className="button-secondary" href="/">Lihat Tampilan Publik</Link>
+              </div>
+            </header>
+
+            {errors.load && <div className="admin-alert admin-alert--error" role="alert">{errors.load}</div>}
+            {errors.save && <div className="admin-alert admin-alert--error" role="alert">{errors.save}</div>}
+            {feedback && <div className="admin-feedback" role="status">{feedback}</div>}
+
+            <div className="admin-content-grid">
+              <AdminCaseBrowser
+                cases={cases}
+                onChoose={chooseCase}
+                onCreate={startNewCase}
+                onRefresh={refreshCases}
+                selectedCase={selectedCase}
+                selectedId={selectedId}
+              />
+              <AdminCaseEditor
+                caseForm={caseForm}
+                errors={errors}
+                fundForms={fundForms}
+                onAddFund={addFundRecord}
+                onAddSource={addSource}
+                onCaseFieldChange={updateCaseField}
+                onFundChange={updateFund}
+                onPublish={requestPublish}
+                onSaveDraft={() => saveCase("DRAFT")}
+                onSourceChange={updateSource}
+                onStepChange={goToFormStep}
+                saving={saving}
+                sourceForms={sourceForms}
+                step={formStep}
+              />
             </div>
-            <Link className="button-secondary" href="/">Lihat Tampilan Publik</Link>
-          </header>
-
-          {errors.load && <div className="admin-alert admin-alert--error" role="alert">{errors.load}</div>}
-          {errors.save && <div className="admin-alert admin-alert--error" role="alert">{errors.save}</div>}
-          {feedback && <div className="admin-feedback" role="status">{feedback}</div>}
-
-          <div className="admin-content-grid">
-            <AdminCaseBrowser
-              cases={cases}
-              onChoose={chooseCase}
-              onCreate={startNewCase}
-              onRefresh={refreshCases}
-              selectedCase={selectedCase}
-              selectedId={selectedId}
-            />
-            <AdminCaseEditor
-              caseForm={caseForm}
-              errors={errors}
-              fundForms={fundForms}
-              onAddFund={addFundRecord}
-              onAddSource={addSource}
-              onCaseFieldChange={updateCaseField}
-              onFundChange={updateFund}
-              onPublish={requestPublish}
-              onSaveDraft={() => saveCase("DRAFT")}
-              onSourceChange={updateSource}
-              onStepChange={goToFormStep}
-              saving={saving}
-              sourceForms={sourceForms}
-              step={formStep}
-            />
-          </div>
-        </main>
+          </main>
+        )}
       </div>
 
       {isConfirmOpen && (

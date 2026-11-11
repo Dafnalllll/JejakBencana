@@ -10,20 +10,27 @@ interface AdminSidebarProps {
   onLogout: () => void;
   onCreateCase: () => void;
   onNavigateToStep: (step: AdminFormStep) => void;
+  onShowDashboard?: () => void;
+  onShowCases?: () => void;
+  onShowFunds?: () => void;
   currentStep: AdminFormStep;
+  isDashboardActive?: boolean;
+  isCasesActive?: boolean;
+  isFundsActive?: boolean;
 }
 
 const navigationLinks: {
   label: string;
   href?: string;
   step?: AdminFormStep;
-  icon: "dashboard" | "cases" | "funds" | "sources" | "glossary";
+  icon: "dashboard" | "cases" | "funds" | "sources" | "glossary" | "settings";
 }[] = [
   { label: "Dashboard Ringkasan", href: "/admin#dashboard", icon: "dashboard" },
   { label: "Entri Bencana & Kasus", step: 0, icon: "cases" },
   { label: "Catatan Alokasi & DSP", step: 1, icon: "funds" },
   { label: "Verifikasi Sumber Data", href: "/admin/sumber", icon: "sources" },
-  { label: "Glosarium & Istilah", href: "/admin/glosarium", icon: "glossary" },
+  // { label: "Glosarium & Istilah", href: "/admin/glosarium", icon: "glossary" },
+  { label: "Pengaturan Sistem", href: "/admin/pengaturan", icon: "settings" },
 ];
 
 function SidebarIcon({ name }: { name: (typeof navigationLinks)[number]["icon"] }) {
@@ -59,6 +66,12 @@ function SidebarIcon({ name }: { name: (typeof navigationLinks)[number]["icon"] 
         <path d="M4 17a2.5 2.5 0 0 1 2.5-2.5H20M8 7h8m-8 3h6" />
       </>
     ),
+    settings: (
+      <>
+        <circle cx="12" cy="12" r="3" />
+        <path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a7.7 7.7 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a7.7 7.7 0 0 1-1.7-1l-1.7.7-1.4-2.4L7.3 15a7.5 7.5 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a7.7 7.7 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a7.7 7.7 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a7.5 7.5 0 0 1 0 2Z" />
+      </>
+    ),
   };
 
   return (
@@ -72,7 +85,13 @@ export default function AdminSidebar({
   onLogout,
   onCreateCase,
   onNavigateToStep,
+  onShowDashboard,
+  onShowCases,
+  onShowFunds,
   currentStep,
+  isDashboardActive,
+  isCasesActive,
+  isFundsActive,
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -211,13 +230,21 @@ export default function AdminSidebar({
         </button>
         <nav className="admin-sidebar__links" aria-label="Navigasi admin">
           {navigationLinks.map((link) => {
-            const isActive = link.step !== undefined
-              ? pathname === "/admin" && currentStep === link.step
+            const isActive = link.step === 0
+              ? pathname === "/admin" && (isCasesActive ?? currentStep === 0)
+              : link.step === 1
+                ? pathname === "/admin" && (isFundsActive ?? currentStep === 1)
+              : link.step !== undefined
+                ? pathname === "/admin" && currentStep === link.step
+              : link.href === "/admin#dashboard"
+                ? pathname === "/admin" && isDashboardActive
               : link.href === "/admin/sumber"
                 ? pathname.startsWith("/admin/sumber")
                 : link.href === "/admin/glosarium"
                   ? pathname.startsWith("/admin/glosarium")
-                  : false;
+                    : link.href === "/admin/pengaturan"
+                      ? pathname.startsWith("/admin/pengaturan")
+                    : false;
             const className = isActive ? "is-active" : undefined;
             const content = (
               <>
@@ -235,7 +262,9 @@ export default function AdminSidebar({
                   className={className}
                   key={link.label}
                   onClick={() => {
-                    onNavigateToStep(step);
+                    if (step === 0 && onShowCases) onShowCases();
+                    else if (step === 1 && onShowFunds) onShowFunds();
+                    else onNavigateToStep(step);
                     closeMenu();
                   }}
                   type="button"
@@ -254,7 +283,10 @@ export default function AdminSidebar({
                 className={className}
                 href={href}
                 key={link.label}
-                onClick={closeMenu}
+                onClick={() => {
+                  if (href === "/admin#dashboard") onShowDashboard?.();
+                  closeMenu();
+                }}
               >
                 {content}
               </Link>
