@@ -25,6 +25,22 @@
 //   `${item.term} ${item.definition}`.toLocaleLowerCase("id").includes(normalizedSearch),
 // );
 
+export default function AdminGlossaryDisabledPage() {
+  return (
+    <main className="grid min-h-screen place-items-center bg-[#F7F8FC] px-5 py-12 text-[#202B40]">
+      <section className="w-full max-w-lg rounded-xl border border-[#DDE3EA] bg-white p-6 text-center shadow-sm sm:p-8">
+        <span className="mx-auto grid size-12 place-items-center rounded-full bg-amber-50 text-xl text-amber-700" aria-hidden="true">
+          !
+        </span>
+        <h1 className="mt-4 text-lg font-bold">Manajemen glosarium dinonaktifkan</h1>
+        <p className="mt-2 text-sm leading-6 text-[#64748B]">
+          Halaman ini sedang dinonaktifkan. Kode lama tetap dikomentari dan tidak dijalankan.
+        </p>
+      </section>
+    </main>
+  );
+}
+
 // useEffect(() => {
 //   if (!localStorage.getItem("jejak_bencana_auth")) {
 //     router.push("/login");
@@ -346,4 +362,3 @@
 //     </AnimatePresence>
 //   </div>
 // );
-
