@@ -62,8 +62,10 @@ Kategori-kategori tersebut menunjukkan **tahapan yang berbeda**. Nilainya tidak 
 | Detail kasus | `/kasus/[slug]` | Melihat rincian kasus, catatan dana, serta dokumen rujukan. |
 | Glosarium | `/glosarium` | Mempelajari istilah DSP dan kategori dana. |
 | Metodologi | `/metodologi` | Membaca pendekatan pengelolaan data dan batasan portal. |
-| Login admin demo | `/admin/login` | Masuk ke simulasi dashboard admin. |
+| Login admin demo | `/login` | Masuk ke simulasi dashboard admin. |
 | Dashboard admin demo | `/admin` | Mengelola data kasus contoh. |
+
+`/api/admin/login` adalah endpoint API yang dipanggil oleh formulir login, bukan rute halaman login.
 
 ### Akses admin demo
 

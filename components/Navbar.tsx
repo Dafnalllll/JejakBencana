@@ -1,10 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+const links = [
+  { label: "Beranda", href: "/" },
+  { label: "Kasus", href: "/kasus" },
+  { label: "Glosarium", href: "/glosarium" },
+];
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -18,82 +24,119 @@ export default function Navbar() {
     pathname === "/metodologi" ||
     /^\/kasus\/[^/]+\/?$/.test(pathname);
 
-  if (!isPublicRoute) {
-    return null;
-  }
+  if (!isPublicRoute) return null;
 
-  const links = [
-    { label: "Beranda", href: "/" },
-    { label: "Kasus", href: "/kasus" },
-    { label: "Glosarium", href: "/glosarium" },
-  ];
+  const isActive = (href: string) =>
+    pathname === href || (href === "/kasus" && pathname.startsWith("/kasus/"));
 
   return (
-    <header
-      className={`site-header border-b-[#DCE7E5]! bg-white/90! shadow-sm! backdrop-blur-xl!${pathname === "/" ? " site-header--home" : ""}${pathname.startsWith("/kasus") ? " site-header--cases" : ""}${pathname === "/glosarium" ? " site-header--glossary" : ""}`}
-    >
-      <div className="site-header__inner min-h-[72px]! w-[92%]! max-w-[1240px]! gap-5! max-md:min-h-[60px]! max-md:w-[calc(100%-32px)]!">
-        <Link className="brand gap-3! transition-opacity! hover:opacity-85!" href="/" onClick={() => setIsOpen(false)}>
-          <span className="brand__mark h-10! w-10! rounded-xl! border border-[#D4EFE8]! bg-white! shadow-lg! ring-4! ring-[#E6F4F0]!" aria-hidden="true">
+    <header className="relative z-30 border-b border-[#DCE7E5] bg-white/95 shadow-sm backdrop-blur-xl">
+      <div className="mx-auto flex min-h-[64px] w-[calc(100%-32px)] max-w-[1240px] items-center justify-between gap-3 sm:min-h-[72px] sm:w-[calc(100%-48px)] lg:gap-6">
+        <Link
+          className="inline-flex min-w-0 shrink-0 items-center gap-2.5 text-[#172238] no-underline transition-opacity hover:opacity-85 sm:gap-3"
+          href="/"
+          onClick={() => setIsOpen(false)}
+        >
+          <span
+            className="grid size-9 shrink-0 place-items-center rounded-xl border border-[#D4EFE8] bg-white shadow-md ring-4 ring-[#E6F4F0] sm:size-10"
+            aria-hidden="true"
+          >
             <Image
               src="/favicon.ico"
               alt=""
               width={28}
               height={28}
-              className="h-7! w-7! object-contain!"
+              className="size-6 object-contain sm:size-7"
             />
           </span>
-          <span>
-            <span className="brand__name text-base! leading-6! tracking-[-0.025em]!">Jejak Bencana</span>
-            <span className="brand__caption text-[11px]! leading-4!">Transparansi Dana Kebencanaan</span>
+          <span className="min-w-0">
+            <span className="block truncate text-[13px] leading-[18px] font-bold tracking-[-0.025em] sm:text-base sm:leading-6">
+              Jejak Bencana
+            </span>
+            <span className="mt-0.5 block truncate text-[9px] leading-3 text-[#64716F] sm:text-[11px] sm:leading-4">
+              Transparansi Dana Kebencanaan
+            </span>
           </span>
         </Link>
 
-        <nav className="site-nav" aria-label="Navigasi utama">
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label="Navigasi utama"
+        >
           {links.map((link) => (
             <Link
-              aria-current={
-                pathname === link.href ||
-                (link.href === "/kasus" && pathname.startsWith("/kasus/"))
-                  ? "page"
-                  : undefined
-              }
-              key={link.href}
+              aria-current={isActive(link.href) ? "page" : undefined}
+              className={`rounded-full px-3 py-2 text-[13px] leading-5 font-semibold no-underline transition-colors xl:px-4 ${
+                isActive(link.href)
+                  ? "bg-[#EAF7F3] text-[#006C62] shadow-sm"
+                  : "text-[#52627A] hover:bg-[#F1F6F5] hover:text-[#006C62]"
+              }`}
               href={link.href}
-              className={`rounded-full! border-b-0! px-4! py-2.5! text-sm! leading-5! transition-colors! ${pathname === link.href || (link.href === "/kasus" && pathname.startsWith("/kasus/")) ? "bg-[#EAF7F3]! text-[#006C62]! shadow-sm!" : "text-[#52627A]! hover:bg-[#F1F6F5]! hover:text-[#006C62]!"}`}
+              key={link.href}
             >
               {link.label}
             </Link>
           ))}
-          <span className="site-nav__external rounded-full! bg-[#F0F6F4]! px-3! py-2! text-[11px]! leading-5!" aria-label="SISTALA-DSP BNPB">
-            SISTALA-DSP BNPB
-          </span>
         </nav>
 
-        <div className="site-header__actions">
-          <Link className="portal-admin-link min-h-11! rounded-full! border-transparent! bg-[#005C55]! px-5! text-sm! text-white! shadow-md! transition-all! hover:-translate-y-0.5! hover:bg-[#004943]! hover:shadow-lg!" href="/admin">
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            className="hidden min-h-10 items-center justify-center gap-2 rounded-full bg-[#005C55] px-4 text-[12px] font-bold text-white no-underline shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#004943] hover:shadow-lg lg:inline-flex xl:px-5 xl:text-sm"
+            href="/admin"
+          >
             Portal Admin
-            <svg className="ml-2! h-4! w-4!" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              className="size-4"
+              viewBox="0 0 20 20"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 10h12m-5-5 5 5-5 5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </Link>
           <motion.button
             aria-label={isOpen ? "Tutup menu" : "Buka menu"}
             aria-expanded={isOpen}
             aria-controls="mobile-site-nav"
-            className="mobile-menu-button h-11! w-11! rounded-full! border-[#CFE2DC]! bg-[#F1F8F5]! text-[#006C62]! shadow-sm! transition-all! hover:bg-[#E4F2EC]!"
+            className="grid size-10 place-items-center rounded-full border border-[#CFE2DC] bg-[#F1F8F5] text-[#006C62] shadow-sm transition-colors hover:bg-[#E4F2EC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#087C67] lg:hidden"
             onClick={() => setIsOpen((open) => !open)}
             type="button"
             whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
             transition={{ type: "spring", stiffness: 400, damping: 24 }}
           >
             {isOpen ? (
-              <svg className="h-6! w-6!" width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <svg
+                className="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="m6 6 12 12M18 6 6 18"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
               </svg>
             ) : (
-              <svg className="h-6! w-6!" width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <svg
+                className="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 7h16M4 12h16M4 17h16"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
               </svg>
             )}
           </motion.button>
@@ -104,7 +147,7 @@ export default function Navbar() {
         {isOpen && (
           <motion.nav
             id="mobile-site-nav"
-            className="mobile-site-nav rounded-b-2xl! border-[#DCE7E5]! bg-white/95! px-4! pb-5! pt-3! shadow-xl! backdrop-blur-xl!"
+            className="absolute inset-x-0 top-full z-30 grid gap-1 border-b border-[#DCE7E5] bg-white/95 px-4 py-3 shadow-xl backdrop-blur-xl lg:hidden"
             aria-label="Navigasi mobile"
             initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -116,22 +159,39 @@ export default function Navbar() {
           >
             {links.map((link) => (
               <Link
-                aria-current={pathname === link.href || (link.href === "/kasus" && pathname.startsWith("/kasus/")) ? "page" : undefined}
-                key={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`flex min-h-11 items-center rounded-xl px-4 text-sm font-semibold no-underline transition-colors ${
+                  isActive(link.href)
+                    ? "bg-[#EAF7F3] text-[#006C62]"
+                    : "text-[#52627A] hover:bg-[#F1F6F5] hover:text-[#006C62]"
+                }`}
                 href={link.href}
-                className={`min-h-12! rounded-xl! px-4! py-3! text-base! transition-colors! ${pathname === link.href || (link.href === "/kasus" && pathname.startsWith("/kasus/")) ? "bg-[#EAF7F3]! text-[#006C62]!" : "text-[#52627A]! hover:bg-[#F1F6F5]! hover:text-[#006C62]!"}`}
+                key={link.href}
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
-            <span className="min-h-12! rounded-xl! px-4! py-3! text-xs! font-semibold! text-[#71807F]!">SISTALA-DSP BNPB</span>
             <Link
-              className="portal-admin-link min-h-12! rounded-xl! border-transparent! bg-[#005C55]! px-4! text-sm! text-white! shadow-md!"
+              className="mt-1 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#005C55] px-4 text-sm font-bold text-white no-underline shadow-md transition-colors hover:bg-[#004943]"
               href="/admin"
               onClick={() => setIsOpen(false)}
             >
               Portal Admin
+              <svg
+                className="size-4"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 10h12m-5-5 5 5-5 5"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
           </motion.nav>
         )}
